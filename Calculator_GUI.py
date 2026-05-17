@@ -43,6 +43,7 @@ windowmenu = tk.Menu(menu)
 menu.add_cascade(label="Window", menu=windowmenu)
 windowmenu.add_command(label="New Window", command=open_new_window)
 
+
 helpmenu = tk.Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
 helpmenu.add_command(label="About")
@@ -95,6 +96,7 @@ DISTRIBUTIONS = {
 for name in DISTRIBUTIONS:
     Mylist.insert(tk.END, name)
 
+current_distribution = "Normal"
 
 def on_select(event):
     selection = Mylist.curselection()
@@ -102,9 +104,20 @@ def on_select(event):
         return
     choice = Mylist.get(selection[0])
     if choice in DISTRIBUTIONS:
+        current_distribution = choice
         reset_inputs()
         DISTRIBUTIONS[choice](input_frame, fig, canvas)
 
+def info(current_distribution):
+    new_window = tk.Toplevel(root)
+    new_window.title("New Window")
+    new_window.geometry("300x200")
+    label = tk.Label(new_window, text="This is a new window!")
+    label.pack(pady=20)
+    
+infomenu = tk.Menu(menu)
+menu.add_cascade(label="Info", menu=infomenu)
+infomenu.add_command(label="About", command=info(current_distribution))
 
 Mylist.bind("<<ListboxSelect>>", on_select)
 
