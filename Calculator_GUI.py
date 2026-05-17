@@ -28,6 +28,7 @@ def open_new_window():
 root = tk.Tk()
 root.title("Distribution Calculator")
 root.geometry("1200x500")
+root.minsize(1100, 400)
 
 #---file menue---
 menu = tk.Menu(root)
@@ -58,17 +59,18 @@ Mylist.pack(side=tk.LEFT, fill=tk.BOTH)
 
 scrollbar.config(command=Mylist.yview)
 
+# ---Right panel: inputs---
+input_frame = tk.Frame(root, width= 200, padx=10, pady=10)
+input_frame.pack_propagate(False)
+input_frame.pack(side=tk.RIGHT, fill=tk.Y)
+
 # ---Centre panel: canvas---
 right_frame = tk.Frame(root)
-right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=False)
+right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 fig = plt.figure()
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
-canvas.get_tk_widget().pack(fill=tk.BOTH, expand=False)
-
-# ---Right panel: inputs---
-input_frame = tk.Frame(root, padx=10, pady=10)
-input_frame.pack(side=tk.LEFT, fill=tk.Y)
+canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
 
 def reset_inputs():
