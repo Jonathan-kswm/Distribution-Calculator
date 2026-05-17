@@ -12,7 +12,7 @@ def draw_normal(input_frame, fig, canvas):
     entry_sd = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="1"))
     entry_sd.pack()
 
-    combo_box = ttk.Combobox(input_frame, values=["Curve", "P(X<x)", "P(X>x)", "P(a<X<b)"], state="readonly")
+    combo_box = ttk.Combobox(input_frame, values=["Curve", "P(X≤x)", "P(X≥x)", "P(a≤X≤b)"], state="readonly")
     combo_box.pack(pady=10)
     combo_box.set("Curve")
 
@@ -23,7 +23,7 @@ def draw_normal(input_frame, fig, canvas):
         for w in extra_frame.winfo_children():
             w.destroy()
         selection = combo_box.get()
-        if selection in ("P(X<x)", "P(X>x)"):
+        if selection in ("P(X≤x)", "P(X≥x)"):
             tk.Label(extra_frame, text="x").pack()
             tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0")).pack()
         elif selection == "P(a<X<b)":
@@ -46,15 +46,15 @@ def draw_normal(input_frame, fig, canvas):
         spinboxes = [w for w in extra_frame.winfo_children() if isinstance(w, tk.Spinbox)]
         if selection == "Curve":
             N(ax, mean, sd)
-        elif selection == "P(X<x)":
+        elif selection == "P(X≤x)":
             prob_X = N_left(ax, mean, sd, float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P(X ≤ {float(spinboxes[0].get())}) = {prob_X:.4f}")
-        elif selection == "P(X>x)":
+        elif selection == "P(X≥x)":
             prob_X = N_right(ax, mean, sd, float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P(X ≥ {float(spinboxes[0].get())}) = {prob_X:.4f}")
-        elif selection == "P(a<X<b)":
+        elif selection == "P(a≤X≤b)":
             prob_X = N_dual(ax, mean, sd, float(spinboxes[1].get()), float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P({float(spinboxes[0].get())} ≤ X ≤ {float(spinboxes[1].get())}) = {prob_X:.4f}")
