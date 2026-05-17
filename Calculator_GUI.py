@@ -51,8 +51,8 @@ def reset_inputs():
 # To add a new distribution: write a draw function in Panels/ and register it here.
 DISTRIBUTIONS = {
     "Normal": draw_normal,
-    "Bivariate Normal": draw_bivariate,
     "Binomial": draw_binomial,
+    "Bivariate Normal": draw_bivariate,
 }
 
 for name in DISTRIBUTIONS:
