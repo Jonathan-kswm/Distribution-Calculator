@@ -15,6 +15,7 @@ from Panels.Binomial_panel import draw_normal as draw_binomial
 from Panels.Levy_panel import draw_levy
 from Panels.Slash_panel import draw_slash
 from Panels.Benini_panel import draw_benini
+from Panels.Reciprocal_panel import draw_reciprocal
 
 root = tk.Tk()
 root.title("Distribution Calculator")
@@ -58,6 +59,7 @@ DISTRIBUTIONS = {
     "Lévy": draw_levy,
     "Slash": draw_slash,
     "Benini": draw_benini,
+    "Reciprocal": draw_reciprocal,
     "Bivariate Normal": draw_bivariate,
 }
 
