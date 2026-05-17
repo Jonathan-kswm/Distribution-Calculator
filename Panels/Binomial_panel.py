@@ -36,6 +36,7 @@ def draw_normal(input_frame, fig, canvas):
             tk.Spinbox(extra_frame, from_=0, to=1000, textvariable=tk.StringVar(value="2")).pack()
             tk.Label(extra_frame, text="b (upper)").pack()
             tk.Spinbox(extra_frame, from_=0, to=1000, textvariable=tk.StringVar(value="4")).pack()
+        plot()
 
     combo_box.bind("<<ComboboxSelected>>", update_extra_inputs)
     
