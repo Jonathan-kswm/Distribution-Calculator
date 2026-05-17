@@ -15,7 +15,7 @@ def N(ax, mean = 0, sd = 1):
 
     ax.plot(x, y)
 
-def N_left(mean = 0, sd = 1, X = 1):
+def N_left(ax, mean = 0, sd = 1, X = 1):
     pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
     prob_X, _ = integrate.quad(pdf, -np.inf, X)
     
@@ -24,14 +24,14 @@ def N_left(mean = 0, sd = 1, X = 1):
     
     x_fill = np.linspace(mean - 4*sd, X, 500)
     y_fill = pdf(x_fill)
-    plt.fill_between(x_fill, y_fill, alpha=0.4)
+    ax.fill_between(x_fill, y_fill, alpha=0.4)
     
-    plt.annotate(f"P(X ≤ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
+    ax.annotate(f"P(X ≤ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
     
-    plt.plot(x, y)
-    plt.show()
+    ax.plot(x, y)
+    
 
-def N_right(mean = 0, sd = 1, X = 1):
+def N_right(ax, mean = 0, sd = 1, X = 1):
     pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
     prob_X, _ = integrate.quad(pdf, X, np.inf)
     
@@ -40,14 +40,13 @@ def N_right(mean = 0, sd = 1, X = 1):
     
     x_fill = np.linspace(X, mean + 4*sd, 500)
     y_fill = pdf(x_fill)
-    plt.fill_between(x_fill, y_fill, alpha=0.4)
+    ax.fill_between(x_fill, y_fill, alpha=0.4)
     
-    plt.annotate(f"P(X ≥ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
+    ax.annotate(f"P(X ≥ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
 
-    plt.plot(x, y)
-    plt.show()
+    ax.plot(x, y)
 
-def N_dual(mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
+def N_dual(ax, mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
     pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
     prob_X, _ = integrate.quad(pdf, X2, X1)
     
@@ -56,11 +55,11 @@ def N_dual(mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
     
     x_fill = np.linspace(X2, X1, 500)
     y_fill = pdf(x_fill)
-    plt.fill_between(x_fill, y_fill, alpha=0.4)
+    ax.fill_between(x_fill, y_fill, alpha=0.4)
     
-    plt.annotate(f"P( {X1}≥ X ≥ {X2}) = {prob_X:.2f}", xy= (max(x)-3.3, max(y)))
+    ax.annotate(f"P( {X1}≥ X ≥ {X2}) = {prob_X:.2f}", xy= (max(x)-3.3, max(y)))
 
-    plt.plot(x, y)
-    plt.show()
+    ax.plot(x, y)
+
     
     

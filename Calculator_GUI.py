@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Distributions.Normal_dist import N, N_left, N_right, N_dual
 from Distributions.Multivariate_normal import binorm
+from tkinter import ttk
 
 root = tk.Tk()
 root.title("Distribution Calculator")
@@ -44,20 +45,56 @@ input_frame.pack(side=tk.LEFT, fill=tk.Y)
 # ---Distribution draw functions---
 # To add a new distribution: write a draw function and add it to DISTRIBUTIONS.
 
+def reset_inputs():
+    for widget in input_frame.winfo_children():
+        widget.destroy()
+
 def draw_normal():
+    reset_inputs()
     tk.Label(input_frame, text="Mean").pack()
-    entry1 = tk.Spinbox(input_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0"))
-    entry1.pack()
+    entry_mean = tk.Spinbox(input_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0"))
+    entry_mean.pack()
     tk.Label(input_frame, text="SD").pack()
-    entry2 = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="1"))
-    entry2.pack()
+    entry_sd = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="1"))
+    entry_sd.pack()
+
+    combo_box = ttk.Combobox(input_frame, values=["Curve", "P(X<x)", "P(X>x)", "P(a<X<b)"], state="readonly")
+    combo_box.pack()
+    combo_box.set("Curve")
+
+    extra_frame = tk.Frame(input_frame)
+    extra_frame.pack()
+
+    def update_extra_inputs(event=None):
+        for w in extra_frame.winfo_children():
+            w.destroy()
+        selection = combo_box.get()
+        if selection in ("P(X<x)", "P(X>x)"):
+            tk.Label(extra_frame, text="x").pack()
+            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0")).pack()
+        elif selection == "P(a<X<b)":
+            tk.Label(extra_frame, text="a (lower)").pack()
+            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="-0.25")).pack()
+            tk.Label(extra_frame, text="b (upper)").pack()
+            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0.25")).pack()
+
+    combo_box.bind("<<ComboboxSelected>>", update_extra_inputs)
 
     def plot():
-        mean = float(entry1.get())
-        sd = float(entry2.get())
+        mean = float(entry_mean.get())
+        sd = float(entry_sd.get())
         fig.clear()
         ax = fig.add_subplot(111)
-        N(ax, mean, sd)
+        selection = combo_box.get()
+        spinboxes = [w for w in extra_frame.winfo_children() if isinstance(w, tk.Spinbox)]
+        if selection == "Curve":
+            N(ax, mean, sd)
+        elif selection == "P(X<x)":
+            N_left(ax, mean, sd, float(spinboxes[0].get()))
+        elif selection == "P(X>x)":
+            N_right(ax, mean, sd, float(spinboxes[0].get()))
+        elif selection == "P(a<X<b)":
+            N_dual(ax, mean, sd, float(spinboxes[1].get()), float(spinboxes[0].get()))
         canvas.draw()
 
     tk.Button(input_frame, text="Plot", command=plot).pack(pady=5)
@@ -66,6 +103,7 @@ def draw_normal():
     
     
 def draw_bivariate():
+    reset_inputs()
     fig.clear()
     ax = fig.add_subplot(111, projection='3d')
     binorm(ax)
@@ -91,6 +129,8 @@ Mylist.bind("<<ListboxSelect>>", on_select)
 
 draw_normal()
 root.mainloop()
+
+
 
 
 
