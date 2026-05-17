@@ -39,7 +39,7 @@ def N_right(mean = 0, sd = 1, X = 1):
     x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
     y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
     
-    x_fill = np.linspace(mean + 4*sd, X, 500)
+    x_fill = np.linspace(X, mean + 4*sd, 500)
     y_fill = pdf(x_fill)
     plt.fill_between(x_fill, y_fill, alpha=0.4)
     
@@ -55,7 +55,7 @@ def N_dual(mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
     x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
     y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
     
-    x_fill = np.linspace(X1, X2, 500)
+    x_fill = np.linspace(X2, X1, 500)
     y_fill = pdf(x_fill)
     plt.fill_between(x_fill, y_fill, alpha=0.4)
     
