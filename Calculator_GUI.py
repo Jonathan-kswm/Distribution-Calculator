@@ -24,7 +24,6 @@ scrollbar = tk.Scrollbar(left_frame)
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
 Mylist = tk.Listbox(left_frame, yscrollcommand=scrollbar.set)
-Mylist.insert(tk.END, "Normal", "Bivariate Normal")
 Mylist.pack(side=tk.LEFT, fill=tk.BOTH)
 
 scrollbar.config(command=Mylist.yview)
@@ -34,6 +33,12 @@ right_frame = tk.Frame(root)
 right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 fig = plt.figure()
+
+canvas = FigureCanvasTkAgg(fig, master=right_frame)
+canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+# ---Distribution draw functions---
+# To add a new distribution: write a draw function and add it to DISTRIBUTIONS.
 
 def draw_normal():
     fig.clear()
@@ -48,21 +53,25 @@ def draw_bivariate():
     binorm(ax)
     canvas.draw()
 
+DISTRIBUTIONS = {
+    "Normal": draw_normal,
+    "Bivariate Normal": draw_bivariate,
+}
+
+for name in DISTRIBUTIONS:
+    Mylist.insert(tk.END, name)
+
 def on_select(event):
     selection = Mylist.curselection()
     if not selection:
         return
     choice = Mylist.get(selection[0])
-    if choice == "Normal":
-        draw_normal()
-    elif choice == "Bivariate Normal":
-        draw_bivariate()
+    if choice in DISTRIBUTIONS:
+        DISTRIBUTIONS[choice]()
 
 Mylist.bind("<<ListboxSelect>>", on_select)
 
-canvas = FigureCanvasTkAgg(fig, master=right_frame)
 draw_normal()
-canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
 # ---Buttons---
 btn = tk.Button(root, text="Calculate", command=lambda: print("Calculate clicked"))
