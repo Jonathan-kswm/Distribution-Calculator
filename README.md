@@ -70,6 +70,24 @@ Distribution Calculator/
     ├── bivariate_panel.py         # draw_bivariate(input_frame, fig, canvas)
     └── Binomial_panel.py          # draw_binomial(input_frame, fig, canvas)
 ```
+## Planned Features
+More Distrributions:
+1. Benini distribution
+2. Reciprocal distribution
+3. Raised cosine
+4. Kumaraswamy distribution
+5. Bivariate Cauchy
+6. Dirichlet (k=3)
+7. Bivariate Laplace
+8. Copula surfaces
+9. Hyper-Erlang
+10. Muth distribution
+11. Gompertz distribution
+
+GUI updates:
+- Themes
+- Info section for distributions
+- look up table generator
 
 ## Adding a New Distribution
 
