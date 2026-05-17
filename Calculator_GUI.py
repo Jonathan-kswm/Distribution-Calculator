@@ -9,12 +9,12 @@ import tkinter as tk
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from Distributions.Normal_dist import N_left, N_right, N_dual
+from Distributions.Normal_dist import N, N_left, N_right, N_dual
 from Distributions.Multivariate_normal import binorm
 
 root = tk.Tk()
 root.title("Distribution Calculator")
-root.geometry("800x500")
+root.geometry("1200x500")
 
 # ---Left panel: scrollbar + listbox---
 left_frame = tk.Frame(root)
@@ -30,23 +30,41 @@ scrollbar.config(command=Mylist.yview)
 
 # ---Right panel: canvas---
 right_frame = tk.Frame(root)
-right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=False)
 
 fig = plt.figure()
 
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
-canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+canvas.get_tk_widget().pack(fill=tk.BOTH, expand=False)
 
+
+# ---Right panel: inputs---
+input_frame = tk.Frame(root, padx=10, pady=10)
+input_frame.pack(side=tk.LEFT, fill=tk.Y)
 # ---Distribution draw functions---
 # To add a new distribution: write a draw function and add it to DISTRIBUTIONS.
 
 def draw_normal():
-    fig.clear()
-    ax = fig.add_subplot(111)
-    x = np.linspace(-4, 4, 500)
-    ax.plot(x, (1/np.sqrt(2*np.pi))*np.exp(-0.5*x**2))
-    canvas.draw()
+    tk.Label(input_frame, text="Mean").pack()
+    entry1 = tk.Spinbox(input_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0"))
+    entry1.pack()
+    tk.Label(input_frame, text="SD").pack()
+    entry2 = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="1"))
+    entry2.pack()
 
+    def plot():
+        mean = float(entry1.get())
+        sd = float(entry2.get())
+        fig.clear()
+        ax = fig.add_subplot(111)
+        N(ax, mean, sd)
+        canvas.draw()
+
+    tk.Button(input_frame, text="Plot", command=plot).pack(pady=5)
+    plot()
+    
+    
+    
 def draw_bivariate():
     fig.clear()
     ax = fig.add_subplot(111, projection='3d')
@@ -72,11 +90,8 @@ def on_select(event):
 Mylist.bind("<<ListboxSelect>>", on_select)
 
 draw_normal()
-
-# ---Buttons---
-btn = tk.Button(root, text="Calculate", command=lambda: print("Calculate clicked"))
-btn2 = tk.Button(root, text="Calculate", command=lambda: print("yay"))
-btn.pack(side=tk.BOTTOM, pady=10)
-btn2.pack(side=tk.BOTTOM, pady=10)
-
 root.mainloop()
+
+
+
+

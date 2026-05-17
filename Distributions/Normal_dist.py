@@ -9,12 +9,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
 
-def N(mean = 0, sd = 1, x = "placeholder"):
+def N(ax, mean = 0, sd = 1):
     x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
     y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
 
-    plt.plot(x, y)
-    plt.show()
+    ax.plot(x, y)
 
 def N_left(mean = 0, sd = 1, X = 1):
     pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
