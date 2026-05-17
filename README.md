@@ -15,9 +15,9 @@ A Python desktop application for visualising and computing probabilities for sta
 - Plot the probability density curve for any mean and standard deviation
 - Four modes selectable from a dropdown:
   - **Curve** — plot the PDF
-  - **P(X < x)** — left-tail probability with shaded area
-  - **P(X > x)** — right-tail probability with shaded area
-  - **P(a < X < b)** — interval probability with shaded area
+  - **P(X ≤ x)** — left-tail probability with shaded area
+  - **P(X ≥ x)** — right-tail probability with shaded area
+  - **P(a ≤ X ≤ b)** — interval probability with shaded area
 
 ### Bivariate Normal Distribution
 - 3D surface plot of the joint PDF
