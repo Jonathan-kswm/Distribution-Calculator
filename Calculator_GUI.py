@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from Distributions.Normal_dist import N_left, N_right, N_dual
+from Distributions.Multivariate_normal import binorm
 
 root = tk.Tk()
 root.title("Distribution Calculator")
@@ -23,21 +24,44 @@ scrollbar = tk.Scrollbar(left_frame)
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
 Mylist = tk.Listbox(left_frame, yscrollcommand=scrollbar.set)
-Mylist.insert(tk.END, "Normal", "Multivariate Normal")
+Mylist.insert(tk.END, "Normal", "Bivariate Normal")
 Mylist.pack(side=tk.LEFT, fill=tk.BOTH)
 
 scrollbar.config(command=Mylist.yview)
 
 # ---Right panel: canvas---
 right_frame = tk.Frame(root)
-right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=False)
+right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-fig, ax = plt.subplots()
-x = np.linspace(-4, 4, 500)
-ax.plot(x, (1/np.sqrt(2*np.pi))*np.exp(-0.5*x**2))
+fig = plt.figure()
+
+def draw_normal():
+    fig.clear()
+    ax = fig.add_subplot(111)
+    x = np.linspace(-4, 4, 500)
+    ax.plot(x, (1/np.sqrt(2*np.pi))*np.exp(-0.5*x**2))
+    canvas.draw()
+
+def draw_bivariate():
+    fig.clear()
+    ax = fig.add_subplot(111, projection='3d')
+    binorm(ax)
+    canvas.draw()
+
+def on_select(event):
+    selection = Mylist.curselection()
+    if not selection:
+        return
+    choice = Mylist.get(selection[0])
+    if choice == "Normal":
+        draw_normal()
+    elif choice == "Bivariate Normal":
+        draw_bivariate()
+
+Mylist.bind("<<ListboxSelect>>", on_select)
 
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
-canvas.draw()
+draw_normal()
 canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
 # ---Buttons---
