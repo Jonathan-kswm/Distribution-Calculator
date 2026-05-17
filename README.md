@@ -72,7 +72,7 @@ Distribution Calculator/
 ```
 ## Planned Features
 More Distrributions:
-1. Benini distribution
+1. ~~Benini distribution~~
 2. Reciprocal distribution
 3. Raised cosine
 4. Kumaraswamy distribution
