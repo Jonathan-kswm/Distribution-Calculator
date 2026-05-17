@@ -7,10 +7,61 @@ Created on Sun May 17 07:18:17 2026
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.integrate as integrate
 
-def N(mean = 0, sd = 1):
+def N(mean = 0, sd = 1, x = "placeholder"):
     x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
     y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
 
     plt.plot(x, y)
     plt.show()
+
+def N_left(mean = 0, sd = 1, X = 1):
+    pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
+    prob_X, _ = integrate.quad(pdf, -np.inf, X)
+    
+    x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
+    y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
+    
+    x_fill = np.linspace(mean - 4*sd, X, 500)
+    y_fill = pdf(x_fill)
+    plt.fill_between(x_fill, y_fill, alpha=0.4)
+    
+    plt.annotate(f"P(X ≤ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
+    
+    plt.plot(x, y)
+    plt.show()
+
+def N_right(mean = 0, sd = 1, X = 1):
+    pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
+    prob_X, _ = integrate.quad(pdf, X, np.inf)
+    
+    x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
+    y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
+    
+    x_fill = np.linspace(mean + 4*sd, X, 500)
+    y_fill = pdf(x_fill)
+    plt.fill_between(x_fill, y_fill, alpha=0.4)
+    
+    plt.annotate(f"P(X ≥ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
+
+    plt.plot(x, y)
+    plt.show()
+
+def N_dual(mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
+    pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
+    prob_X, _ = integrate.quad(pdf, X2, X1)
+    
+    x = np.linspace(mean - 4*sd, mean + 4*sd, 500)
+    y = (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
+    
+    x_fill = np.linspace(X1, X2, 500)
+    y_fill = pdf(x_fill)
+    plt.fill_between(x_fill, y_fill, alpha=0.4)
+    
+    plt.annotate(f"P( {X1}≥ X ≥ {X2}) = {prob_X:.2f}", xy= (max(x)-3.3, max(y)))
+
+    plt.plot(x, y)
+    plt.show()
+    
+    
