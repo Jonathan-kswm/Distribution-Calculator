@@ -17,6 +17,7 @@ from Panels.Slash_panel import draw_slash
 from Panels.Benini_panel import draw_benini
 from Panels.Reciprocal_panel import draw_reciprocal
 from Panels.Raised_cosine_panel import draw_raised_cosine
+from Panels.Kumaraswamy_panel import draw_kumaraswamy
 
 root = tk.Tk()
 root.title("Distribution Calculator")
@@ -62,6 +63,7 @@ DISTRIBUTIONS = {
     "Benini": draw_benini,
     "Reciprocal": draw_reciprocal,
     "Raised Cosine": draw_raised_cosine,
+    "Kumaraswamy": draw_kumaraswamy,
     "Bivariate Normal": draw_bivariate,
 }
 
