@@ -5,6 +5,8 @@ Created on Sun May 17 08:29:31 2026
 @author: snaph
 """
 
+import subprocess
+import sys
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -19,9 +21,30 @@ from Panels.Reciprocal_panel import draw_reciprocal
 from Panels.Raised_cosine_panel import draw_raised_cosine
 from Panels.Kumaraswamy_panel import draw_kumaraswamy
 
+def open_new_window():
+    subprocess.Popen([sys.executable, __file__])
+
+
 root = tk.Tk()
 root.title("Distribution Calculator")
 root.geometry("1200x500")
+
+#---file menue---
+menu = tk.Menu(root)
+root.config(menu=menu)
+
+filemenu = tk.Menu(menu)
+menu.add_cascade(label="File", menu=filemenu)
+filemenu.add_command(label="New")
+filemenu.add_command(label="Open...")
+
+windowmenu = tk.Menu(menu)
+menu.add_cascade(label="Window", menu=windowmenu)
+windowmenu.add_command(label="New Window", command=open_new_window)
+
+helpmenu = tk.Menu(menu)
+menu.add_cascade(label="Help", menu=helpmenu)
+helpmenu.add_command(label="About")
 
 # ---Left panel: scrollbar + listbox---
 left_frame = tk.Frame(root)
