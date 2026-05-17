@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Sun May 17 13:02:20 2026
 
@@ -14,8 +14,9 @@ def draw_normal(input_frame, fig, canvas):
     entry_trial = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="10"))
     entry_trial.pack()
     tk.Label(input_frame, text="P").pack()
-    entry_p = tk.Spinbox(input_frame, from_=0, to=1, textvariable=tk.StringVar(value="0.5"))
+    entry_p = tk.Spinbox(input_frame, from_=0, to=1, increment=0.01, textvariable=tk.StringVar(value="0.5"))
     entry_p.pack()
+    tk.Label(input_frame, text="k").pack()
     entry_k = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="2"))
     entry_k.pack()
 
@@ -42,9 +43,9 @@ def draw_normal(input_frame, fig, canvas):
     text_widget.pack(pady=15)
     
     def plot():
-        n = float(entry_trial.get())
+        n = int(float(entry_trial.get()))
         p = float(entry_p.get())
-        k = float(entry_k.get())
+        k = int(float(entry_k.get()))
         fig.clear()
         ax = fig.add_subplot(111)
         selection = combo_box.get()

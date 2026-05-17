@@ -23,7 +23,6 @@ def Bin_equal(ax, n=10, k=2, p=0.5):
             bar.set_alpha(0.3)
 
     prob = (math.factorial(n) / (math.factorial(k) * math.factorial(n - k))) * (p**k) * (1-p)**(n-k)
-    ax.set_title(f"P(X = {k}) = {prob:.4f}")
     return prob
 
 

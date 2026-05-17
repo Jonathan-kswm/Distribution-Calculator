@@ -11,6 +11,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from Panels.normal_panel import draw_normal
 from Panels.bivariate_panel import draw_bivariate
+from Panels.Binomial_panel import draw_normal as draw_binomial
 
 root = tk.Tk()
 root.title("Distribution Calculator")
@@ -51,6 +52,7 @@ def reset_inputs():
 DISTRIBUTIONS = {
     "Normal": draw_normal,
     "Bivariate Normal": draw_bivariate,
+    "Binomial": draw_binomial,
 }
 
 for name in DISTRIBUTIONS:
