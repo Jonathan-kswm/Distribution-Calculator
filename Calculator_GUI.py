@@ -59,7 +59,7 @@ def draw_normal():
     entry_sd.pack()
 
     combo_box = ttk.Combobox(input_frame, values=["Curve", "P(X<x)", "P(X>x)", "P(a<X<b)"], state="readonly")
-    combo_box.pack()
+    combo_box.pack(pady= 10)
     combo_box.set("Curve")
 
     extra_frame = tk.Frame(input_frame)
@@ -79,6 +79,9 @@ def draw_normal():
             tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0.25")).pack()
 
     combo_box.bind("<<ComboboxSelected>>", update_extra_inputs)
+    
+    text_widget = tk.Text(input_frame, height =2 ,  width = 20)
+    text_widget.pack(pady =15)
 
     def plot():
         mean = float(entry_mean.get())
@@ -90,11 +93,17 @@ def draw_normal():
         if selection == "Curve":
             N(ax, mean, sd)
         elif selection == "P(X<x)":
-            N_left(ax, mean, sd, float(spinboxes[0].get()))
+            prob_X = N_left(ax, mean, sd, float(spinboxes[0].get()))
+            text_widget.delete("1.0", tk.END)
+            text_widget.insert(tk.END, f"P(X ≤ {float(spinboxes[0].get())}) = {prob_X:.4f}")
         elif selection == "P(X>x)":
-            N_right(ax, mean, sd, float(spinboxes[0].get()))
+            prob_X = N_right(ax, mean, sd, float(spinboxes[0].get()))
+            text_widget.delete("1.0", tk.END)
+            text_widget.insert(tk.END, f"P(X ≥ {float(spinboxes[0].get())}) = {prob_X:.4f}")
         elif selection == "P(a<X<b)":
-            N_dual(ax, mean, sd, float(spinboxes[1].get()), float(spinboxes[0].get()))
+            prob_X = N_dual(ax, mean, sd, float(spinboxes[1].get()), float(spinboxes[0].get()))
+            text_widget.delete("1.0", tk.END)
+            text_widget.insert(tk.END, f"P({float(spinboxes[0].get())} ≤ X ≤ {float(spinboxes[1].get())}) = {prob_X:.4f}")
         canvas.draw()
 
     tk.Button(input_frame, text="Plot", command=plot).pack(pady=5)
@@ -129,6 +138,8 @@ Mylist.bind("<<ListboxSelect>>", on_select)
 
 draw_normal()
 root.mainloop()
+
+
 
 
 

@@ -26,10 +26,10 @@ def N_left(ax, mean = 0, sd = 1, X = 1):
     y_fill = pdf(x_fill)
     ax.fill_between(x_fill, y_fill, alpha=0.4)
     
-    ax.annotate(f"P(X ≤ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
+    #ax.annotate(f"P(X ≤ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
     
     ax.plot(x, y)
-    
+    return prob_X
 
 def N_right(ax, mean = 0, sd = 1, X = 1):
     pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
@@ -42,9 +42,10 @@ def N_right(ax, mean = 0, sd = 1, X = 1):
     y_fill = pdf(x_fill)
     ax.fill_between(x_fill, y_fill, alpha=0.4)
     
-    ax.annotate(f"P(X ≥ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
+    #ax.annotate(f"P(X ≥ {X}) = {prob_X:.2f}", xy= (max(x)-1.8, max(y)))
 
     ax.plot(x, y)
+    return prob_X
 
 def N_dual(ax, mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
     pdf = lambda x: (1/(np.sqrt(2*np.pi)*sd))*np.exp(-0.5*((x-mean)/sd)**2)
@@ -57,9 +58,9 @@ def N_dual(ax, mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
     y_fill = pdf(x_fill)
     ax.fill_between(x_fill, y_fill, alpha=0.4)
     
-    ax.annotate(f"P( {X1}≥ X ≥ {X2}) = {prob_X:.2f}", xy= (max(x)-3.3, max(y)))
+    #ax.annotate(f"P( {X1}≥ X ≥ {X2}) = {prob_X:.2f}", xy= (max(x)-3.3, max(y)))
 
     ax.plot(x, y)
-
+    return prob_X
     
     
