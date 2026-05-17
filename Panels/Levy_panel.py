@@ -1,16 +1,16 @@
 import tkinter as tk
 from tkinter import ttk
 
-from Distributions.Normal_dist import N, N_left, N_right, N_dual
+from Distributions.Levy_dist import lev, lev_left, lev_right, lev_between
 
 
-def draw_normal(input_frame, fig, canvas):
-    tk.Label(input_frame, text="Mean").pack()
-    entry_mean = tk.Spinbox(input_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0"))
-    entry_mean.pack()
-    tk.Label(input_frame, text="SD").pack()
-    entry_sd = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="1"))
-    entry_sd.pack()
+def draw_levy(input_frame, fig, canvas):
+    tk.Label(input_frame, text="Location (μ)").pack()
+    entry_loc = tk.Spinbox(input_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0"))
+    entry_loc.pack()
+    tk.Label(input_frame, text="Scale (c)").pack()
+    entry_scale = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="1"))
+    entry_scale.pack()
 
     combo_box = ttk.Combobox(input_frame, values=["Curve", "P(X≤x)", "P(X≥x)", "P(a≤X≤b)"], state="readonly")
     combo_box.pack(pady=10)
@@ -25,12 +25,12 @@ def draw_normal(input_frame, fig, canvas):
         selection = combo_box.get()
         if selection in ("P(X≤x)", "P(X≥x)"):
             tk.Label(extra_frame, text="x").pack()
-            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0")).pack()
+            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="3")).pack()
         elif selection == "P(a≤X≤b)":
             tk.Label(extra_frame, text="a (lower)").pack()
-            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="-0.25")).pack()
+            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="1")).pack()
             tk.Label(extra_frame, text="b (upper)").pack()
-            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="0.25")).pack()
+            tk.Spinbox(extra_frame, from_=-1000, to=1000, textvariable=tk.StringVar(value="5")).pack()
         plot()
 
     combo_box.bind("<<ComboboxSelected>>", update_extra_inputs)
@@ -39,24 +39,24 @@ def draw_normal(input_frame, fig, canvas):
     text_widget.pack(pady=15)
 
     def plot():
-        mean = float(entry_mean.get())
-        sd = float(entry_sd.get())
+        loc = float(entry_loc.get())
+        scale = float(entry_scale.get())
         fig.clear()
         ax = fig.add_subplot(111)
         selection = combo_box.get()
         spinboxes = [w for w in extra_frame.winfo_children() if isinstance(w, tk.Spinbox)]
         if selection == "Curve":
-            N(ax, mean, sd)
+            lev(ax, loc=loc, scale=scale)
         elif selection == "P(X≤x)":
-            prob_X = N_left(ax, mean, sd, float(spinboxes[0].get()))
+            prob_X = lev_left(ax, loc=loc, scale=scale, param=float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P(X ≤ {float(spinboxes[0].get())}) = {prob_X:.4f}")
         elif selection == "P(X≥x)":
-            prob_X = N_right(ax, mean, sd, float(spinboxes[0].get()))
+            prob_X = lev_right(ax, loc=loc, scale=scale, param=float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P(X ≥ {float(spinboxes[0].get())}) = {prob_X:.4f}")
         elif selection == "P(a≤X≤b)":
-            prob_X = N_dual(ax, mean, sd, float(spinboxes[1].get()), float(spinboxes[0].get()))
+            prob_X = lev_between(ax, loc=loc, scale=scale, param1=float(spinboxes[0].get()), param2=float(spinboxes[1].get()))
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P({float(spinboxes[0].get())} ≤ X ≤ {float(spinboxes[1].get())}) = {prob_X:.4f}")
         canvas.draw()
