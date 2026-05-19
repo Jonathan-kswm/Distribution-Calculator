@@ -10,6 +10,7 @@ import sys
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from PDF_reader import show_pdf
 
 from Panels.normal_panel import draw_normal
 from Panels.bivariate_panel import draw_bivariate
@@ -78,15 +79,15 @@ def reset_inputs():
 # ---Distribution registry---
 # To add a new distribution: write a draw function in Panels/ and register it here.
 DISTRIBUTIONS = {
-    "Normal": draw_normal,
-    "Binomial": draw_binomial,
-    "Lévy": draw_levy,
-    "Slash": draw_slash,
-    "Benini": draw_benini,
-    "Reciprocal": draw_reciprocal,
-    "Raised Cosine": draw_raised_cosine,
-    "Kumaraswamy": draw_kumaraswamy,
-    "Bivariate Normal": draw_bivariate,
+    "Normal": [draw_normal, "pdfs/normal.pdf"],
+    "Binomial": [draw_binomial, "pdfs/binomial.pdf"],
+    "Lévy": [draw_levy, "pdfs/levey.pdf"],
+    "Slash": [draw_slash, "pdfs/normal.pdf"],
+    "Benini": [draw_benini, "pdfs/normal.pdf"],
+    "Reciprocal": [draw_reciprocal, "pdfs/normal.pdf"],
+    "Raised Cosine": [draw_raised_cosine, "pdfs/normal.pdf"],
+    "Kumaraswamy": [draw_kumaraswamy, "pdfs/normal.pdf"],
+    "Bivariate Normal": [draw_bivariate, "pdfs/normal.pdf"],
 }
 
 for name in DISTRIBUTIONS:
@@ -104,14 +105,15 @@ def on_select(event):
         global current_distribution
         current_distribution = choice
         reset_inputs()
-        DISTRIBUTIONS[choice](input_frame, fig, canvas)
+        DISTRIBUTIONS[choice][0](input_frame, fig, canvas)
 
 def info(current_distribution = current_distribution):
     new_window = tk.Toplevel(root)
-    new_window.title("New Window")
-    new_window.geometry("300x200")
-    label = tk.Label(new_window, text=f"{current_distribution}")
-    label.pack(pady=20)
+    new_window.title(f"{current_distribution}")
+    new_window.geometry("600x800")
+    pdf =  show_pdf(new_window, DISTRIBUTIONS[current_distribution][1])
+    #pdf = tk.Canvas(new_window, image=show_pdf(new_window, "normal.pdf"))
+    pdf.pack(pady=20)
     
 infomenu = tk.Menu(menu)
 menu.add_cascade(label="Info", menu=infomenu)
