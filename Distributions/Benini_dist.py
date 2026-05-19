@@ -23,7 +23,7 @@ def Benini10_left(ax, a=4, b=4, s=4, param=5):
     x = np.linspace(0, 10, 500)
     y = np.exp(-a * np.log10(x/s) - b * (np.log10(x/s))**2) * (a/x + (2 * b * np.log10(x/s))/x)
 
-    x_fill = np.linspace(s, param, 500)
+    x_fill = np.linspace(0, param, 500)
     y_fill = pdf(x_fill)
     ax.fill_between(x_fill, y_fill, alpha=0.4)
 
@@ -75,7 +75,7 @@ def Benini_e_left(ax, a=4, b=4, s=4, param=5):
     x = np.linspace(0, 10, 500)
     y = np.exp(-a * np.log(x/s) - b * (np.log(x/s))**2) * (a/x + (2 * b * np.log(x/s))/x)
 
-    x_fill = np.linspace(s, param, 500)
+    x_fill = np.linspace(0, param, 500)
     y_fill = pdf(x_fill)
     ax.fill_between(x_fill, y_fill, alpha=0.4)
 

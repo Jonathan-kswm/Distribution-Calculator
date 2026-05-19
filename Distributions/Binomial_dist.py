@@ -70,5 +70,5 @@ def Bin_between(ax ,n =10, a  =2, b = 4, p=0.5):
         elif idx > b:
             bar.set_alpha(0.3)
             
-    prob = sum(y[a:b+1])
+    prob = sum(y[int(a):int(b+1)])
     return prob

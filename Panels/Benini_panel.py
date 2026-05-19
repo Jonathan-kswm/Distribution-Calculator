@@ -61,7 +61,7 @@ def draw_benini(input_frame, fig, canvas):
 
     combo_box.bind("<<ComboboxSelected>>", update_extra_inputs)
 
-    text_widget = tk.Text(input_frame, height=2, width=20)
+    text_widget = tk.Text(input_frame, height=6, width=20)
     text_widget.pack(pady=15)
 
     def plot():
@@ -84,7 +84,7 @@ def draw_benini(input_frame, fig, canvas):
         elif selection == "P(X≤x)":
             prob = left_fn(ax, a=a, b=b, s=s, param=float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
-            text_widget.insert(tk.END, f"P(X ≤ {float(spinboxes[0].get())}) = {prob:.4f}")
+            text_widget.insert(tk.END, f"P(X ≤ {float(spinboxes[0].get())}) = {prob:.4f} \n \nPlease Note that the Benini distribution is only defined for P(X≤σ)  ")
         elif selection == "P(X≥x)":
             prob = right_fn(ax, a=a, b=b, s=s, param=float(spinboxes[0].get()))
             text_widget.delete("1.0", tk.END)
