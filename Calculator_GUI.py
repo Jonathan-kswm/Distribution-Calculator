@@ -24,7 +24,6 @@ from Panels.Kumaraswamy_panel import draw_kumaraswamy
 def open_new_window():
     subprocess.Popen([sys.executable, __file__])
 
-
 root = tk.Tk()
 root.title("Distribution Calculator")
 root.geometry("1200x500")
@@ -42,7 +41,6 @@ filemenu.add_command(label="Open...")
 windowmenu = tk.Menu(menu)
 menu.add_cascade(label="Window", menu=windowmenu)
 windowmenu.add_command(label="New Window", command=open_new_window)
-
 
 helpmenu = tk.Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)
@@ -73,11 +71,9 @@ fig = plt.figure()
 canvas = FigureCanvasTkAgg(fig, master=right_frame)
 canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
-
 def reset_inputs():
     for widget in input_frame.winfo_children():
         widget.destroy()
-
 
 # ---Distribution registry---
 # To add a new distribution: write a draw function in Panels/ and register it here.
@@ -96,6 +92,7 @@ DISTRIBUTIONS = {
 for name in DISTRIBUTIONS:
     Mylist.insert(tk.END, name)
 
+global current_distribution
 current_distribution = "Normal"
 
 def on_select(event):
@@ -104,23 +101,28 @@ def on_select(event):
         return
     choice = Mylist.get(selection[0])
     if choice in DISTRIBUTIONS:
+        global current_distribution
         current_distribution = choice
         reset_inputs()
         DISTRIBUTIONS[choice](input_frame, fig, canvas)
 
-def info(current_distribution):
+def info(current_distribution = current_distribution):
     new_window = tk.Toplevel(root)
     new_window.title("New Window")
     new_window.geometry("300x200")
-    label = tk.Label(new_window, text="This is a new window!")
+    label = tk.Label(new_window, text=f"{current_distribution}")
     label.pack(pady=20)
     
 infomenu = tk.Menu(menu)
 menu.add_cascade(label="Info", menu=infomenu)
-infomenu.add_command(label="About", command=info(current_distribution))
+infomenu.add_command(label="About", command= lambda: info(current_distribution))
 
 Mylist.bind("<<ListboxSelect>>", on_select)
 
 reset_inputs()
 draw_normal(input_frame, fig, canvas)
 root.mainloop()
+
+#while True:
+#    print(current_distribution)
+    

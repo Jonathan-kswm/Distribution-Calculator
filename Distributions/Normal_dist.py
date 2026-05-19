@@ -62,5 +62,7 @@ def N_dual(ax, mean = 0, sd = 1, X1 = 0.25, X2 = -0.25):
 
     ax.plot(x, y)
     return prob_X
+
+
     
     
