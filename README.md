@@ -15,7 +15,7 @@ A Python desktop application for visualising and computing probabilities for sta
 
 ## Menu Bar
 
-- **File** — `New` and `Open…` placeholders (not yet wired up)
+- **File → Save** — saves the current figure as an image. Opens a Save As dialog pre-filled with `{distribution}_{timestamp}.png`; matplotlib infers the format from the chosen extension (PNG, PDF, or SVG)
 - **Window → New Window** — launches a second instance of the calculator in a separate process
 - **Help → About** — placeholder
 - **Info → About** — opens a Toplevel window displaying the reference PDF for the currently selected distribution, rendered by `PDF_reader.show_pdf` (PyMuPDF + a tkinter Canvas with vertical scroll and mouse-wheel support)
