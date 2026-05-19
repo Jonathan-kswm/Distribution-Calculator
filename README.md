@@ -133,6 +133,7 @@ GUI updates:
 - Themes
 - Reference PDFs for the remaining distributions (currently only Normal, Binomial, and Lévy have real content — the others fall back to `normal.pdf`)
 - Look-up table generator
+- Ability to save figures
 
 ## Adding a New Distribution
 
