@@ -20,7 +20,7 @@ def draw_normal(input_frame, fig, canvas):
     entry_k = tk.Spinbox(input_frame, from_=0, to=1000, textvariable=tk.StringVar(value="2"))
     entry_k.pack()
 
-    combo_box = ttk.Combobox(input_frame, values=["P(X =k)", "P(X≤x)", "P(X≥x)", "P(a≤X≤b)"], state="readonly")
+    combo_box = ttk.Combobox(input_frame, values=["P(X =k)", "P(X≤x)", "P(X≥x)", "P(b≤X≤a)"], state="readonly")
     combo_box.pack(pady=10)
     combo_box.set("P(X =k)")
 
@@ -31,11 +31,11 @@ def draw_normal(input_frame, fig, canvas):
         for w in extra_frame.winfo_children():
             w.destroy()
         selection = combo_box.get()
-        if selection == "P(a≤X≤b)":
-            tk.Label(extra_frame, text="a (lower)").pack()
-            tk.Spinbox(extra_frame, from_=0, to=1000, textvariable=tk.StringVar(value="2")).pack()
-            tk.Label(extra_frame, text="b (upper)").pack()
+        if selection == "P(b≤X≤a)":
+            tk.Label(extra_frame, text="a (upper)").pack()
             tk.Spinbox(extra_frame, from_=0, to=1000, textvariable=tk.StringVar(value="4")).pack()
+            tk.Label(extra_frame, text="b (lower)").pack()
+            tk.Spinbox(extra_frame, from_=0, to=1000, textvariable=tk.StringVar(value="2")).pack()
         plot()
 
     combo_box.bind("<<ComboboxSelected>>", update_extra_inputs)
@@ -61,10 +61,10 @@ def draw_normal(input_frame, fig, canvas):
             prob = Bin_right(ax, n, k, p)
             text_widget.delete("1.0", tk.END)
             text_widget.insert(tk.END, f"P(X ≥ {k}) = {prob:.4f}")
-        elif selection == "P(a≤X≤b)":
+        elif selection == "P(b≤X≤a)":
             prob = Bin_between(ax, n, float(spinboxes[1].get()), float(spinboxes[0].get()), p)
             text_widget.delete("1.0", tk.END)
-            text_widget.insert(tk.END, f"P({float(spinboxes[0].get())} ≤ X ≤ {float(spinboxes[1].get())}) = {prob:.4f}")
+            text_widget.insert(tk.END, f"P({float(spinboxes[0].get())} ≥ X ≥ {float(spinboxes[1].get())}) = {prob:.4f}")
         canvas.draw()
 
     tk.Button(input_frame, text="Plot", command=plot).pack(pady=5)
