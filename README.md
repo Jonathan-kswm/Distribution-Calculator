@@ -126,7 +126,7 @@ More distributions:
 2. ~~Reciprocal distribution~~
 3. ~~Raised cosine~~
 4. ~~Kumaraswamy distribution~~
-5. Bivariate Cauchy
+5. ~~Bivariate Cauchy~~
 6. Dirichlet (k=3)
 7. Bivariate Laplace
 8. Copula surfaces
