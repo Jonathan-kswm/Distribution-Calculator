@@ -25,6 +25,7 @@ from Panels.Raised_cosine_panel import draw_raised_cosine
 from Panels.Kumaraswamy_panel import draw_kumaraswamy
 from Panels.Cauchy_panel import draw_cauchy
 from Panels.bivariate_cauchy_panel import draw_bivariate_cauchy
+from Panels.Dirichlet_panel import draw_dirichlet
 
 def open_new_window():
     subprocess.Popen([sys.executable, __file__])
@@ -76,7 +77,8 @@ DISTRIBUTIONS = {
     "Kumaraswamy": [draw_kumaraswamy, "pdfs/normal.pdf"],
     "Cauchy": [draw_cauchy, "pdfs/normal.pdf"],
     "Bivariate Normal": [draw_bivariate, "pdfs/normal.pdf"],
-    "Bivariate Cauchy": [draw_bivariate_cauchy, "pdfs/normal.pdf"]
+    "Bivariate Cauchy": [draw_bivariate_cauchy, "pdfs/normal.pdf"],
+    "Dirichlet": [draw_dirichlet, "pdfs/normal.pdf"]
 }
 
 for name in DISTRIBUTIONS:

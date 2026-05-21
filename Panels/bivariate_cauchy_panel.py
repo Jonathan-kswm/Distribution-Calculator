@@ -93,7 +93,6 @@ def draw_bivariate_cauchy(input_frame, fig, canvas):
         ax = fig.add_subplot(111, projection="3d")
         selection = combo_box.get()
         spinboxes = [w for w in extra_frame.winfo_children() if isinstance(w, tk.Spinbox)]
-        print(spinboxes)
         
         if selection == "Standard":
                 if rotation == "3D":

@@ -38,6 +38,9 @@ def bivariate_cauchy(ax, scale_x = 1, scale_y = 1, loc_x = 0, loc_y = 0, corr = 
     
     z = (1 / (2 * np.pi * scale_x * scale_y * np.sqrt(1 - corr**2))) * ( 1 + (1 / (1 - corr**2)) * ( ((x - loc_x)**2 / scale_x**2) - ((2 * corr * (x - loc_x) * ( y - loc_y))/(scale_x*scale_y)) + ((y - loc_y)**2)/scale_y**2))**(-3/2)
     
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Prob")
     ax.plot_surface(x, y, z, cmap=cm.coolwarm, linewidth= 0, antialiased = True)
     ax.set_zlim(0, 1.5*z.max())
     ax.zaxis.set_major_locator(LinearLocator(10))
