@@ -23,7 +23,7 @@ def binorm(ax, mean_x=0, mean_y=0, var_x=1, var_y=1, corr_x_y=0.5):
     R = ((X-mean_x)/var_x)**2 - 2*corr_x_y*((X - mean_x)/var_x)*((Y-mean_y)/var_y) + ((Y-mean_y)/var_y)**2
     Z = (1/(2*np.pi*var_x*var_y*np.sqrt(1-corr_x_y**2)))*np.exp((-1/(2*(1-corr_x_y**2))) * R)
 
-    ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+    ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=True)
     ax.set_zlim(0, 1.5*Z.max())
     ax.zaxis.set_major_locator(LinearLocator(10))
     ax.zaxis.set_major_formatter('{x:.02f}')

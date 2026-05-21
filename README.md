@@ -53,6 +53,9 @@ Configurable mean (μ) and scale (s).
 ### Kumaraswamy
 Configurable shape parameters *a* and *b* on the support [0, 1].
 
+### Cauchy
+Configurable location (x₀) and scale (γ). Heavy-tailed and symmetric about x₀; plotted over x₀ ± 10γ to show the slow tail decay.
+
 ### Bivariate Normal
 3D surface plot of the joint PDF. Configurable means, variances, and correlation.
 
@@ -100,6 +103,7 @@ Distribution Calculator/
 │   ├── Reciprocal_dist.py
 │   ├── Raised_cosine_dist.py
 │   ├── Kumaraswamy_dist.py
+│   ├── Cauchy_dist.py
 │   └── Multivariate_normal.py
 └── Panels/                        # GUI panels — one file per distribution
     ├── __init__.py
@@ -111,6 +115,7 @@ Distribution Calculator/
     ├── Reciprocal_panel.py
     ├── Raised_cosine_panel.py
     ├── Kumaraswamy_panel.py
+    ├── Cauchy_panel.py
     └── bivariate_panel.py
 ```
 

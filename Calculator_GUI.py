@@ -23,13 +23,15 @@ from Panels.Benini_panel import draw_benini
 from Panels.Reciprocal_panel import draw_reciprocal
 from Panels.Raised_cosine_panel import draw_raised_cosine
 from Panels.Kumaraswamy_panel import draw_kumaraswamy
+from Panels.Cauchy_panel import draw_cauchy
+from Panels.bivariate_cauchy_panel import draw_bivariate_cauchy
 
 def open_new_window():
     subprocess.Popen([sys.executable, __file__])
 
 root = tk.Tk()
 root.title("Distribution Calculator")
-root.geometry("1200x500")
+root.geometry("1200x800")
 root.minsize(1100, 400)
 
 # ---Left panel: scrollbar + listbox---
@@ -72,7 +74,9 @@ DISTRIBUTIONS = {
     "Reciprocal": [draw_reciprocal, "pdfs/normal.pdf"],
     "Raised Cosine": [draw_raised_cosine, "pdfs/normal.pdf"],
     "Kumaraswamy": [draw_kumaraswamy, "pdfs/normal.pdf"],
+    "Cauchy": [draw_cauchy, "pdfs/normal.pdf"],
     "Bivariate Normal": [draw_bivariate, "pdfs/normal.pdf"],
+    "Bivariate Cauchy": [draw_bivariate_cauchy, "pdfs/normal.pdf"]
 }
 
 for name in DISTRIBUTIONS:
