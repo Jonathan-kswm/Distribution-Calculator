@@ -26,6 +26,8 @@ from Panels.Kumaraswamy_panel import draw_kumaraswamy
 from Panels.Cauchy_panel import draw_cauchy
 from Panels.bivariate_cauchy_panel import draw_bivariate_cauchy
 from Panels.Dirichlet_panel import draw_dirichlet
+from Panels.Student_t_panel import draw_student_t
+from Panels.Chi_squared_panel import draw_chi_squared
 
 def open_new_window():
     subprocess.Popen([sys.executable, __file__])
@@ -76,6 +78,8 @@ DISTRIBUTIONS = {
     "Raised Cosine": [draw_raised_cosine, "pdfs/normal.pdf"],
     "Kumaraswamy": [draw_kumaraswamy, "pdfs/normal.pdf"],
     "Cauchy": [draw_cauchy, "pdfs/normal.pdf"],
+    "Student's t": [draw_student_t, "pdfs/normal.pdf"],
+    "Chi-squared": [draw_chi_squared, "pdfs/normal.pdf"],
     "Bivariate Normal": [draw_bivariate, "pdfs/normal.pdf"],
     "Bivariate Cauchy": [draw_bivariate_cauchy, "pdfs/normal.pdf"],
     "Dirichlet": [draw_dirichlet, "pdfs/normal.pdf"]
