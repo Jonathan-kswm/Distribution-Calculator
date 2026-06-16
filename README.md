@@ -2,22 +2,35 @@
 
 A Python desktop application for visualising and computing probabilities for statistical distributions, built with tkinter and matplotlib.
 
-> **Branch note:** `feature/window-menu` adds a top menu bar and a per-distribution info viewer. **Info → About** now opens a Toplevel window showing a reference PDF for the currently selected distribution (rendered via PyMuPDF). Only `normal.pdf`, `binomial.pdf`, and `levey.pdf` have real content so far — the other distributions point at `normal.pdf` as a placeholder.
+Every distribution is described as a single declarative **spec** in `New_Distributions.py`; one shared engine turns each spec into both its maths and its input panel. Adding a new distribution is "write one spec, add one line to the registry" — no new files and no GUI boilerplate.
 
 ## Features
 
 - Interactive GUI with an embedded matplotlib canvas
-- Top menu bar: **File**, **Window**, **Help**, **Info**
+- Top menu bar: **File**, **Window**, **Info**
 - Select distributions from a scrollable list on the left
 - Configurable parameters via input spinboxes
 - Probability calculations displayed in a result box
 - Per-distribution reference PDFs rendered in a popup window
 
+## Architecture
+
+All distribution logic lives in [`New_Distributions.py`](New_Distributions.py):
+
+- **`Param`** — describes one input spinbox (label, the keyword its value is passed under, default, range, step).
+- **`Distribution`** — base class holding the shared scaffolding (parameter spinboxes, the result box, the Plot button) and the single `draw(input_frame, fig, canvas)` entry point the GUI calls.
+- **Three families** subclass it, each containing the *only* copy of the logic that used to be duplicated per distribution:
+  - **`ContinuousDistribution`** — the four-mode dropdown (Curve / P(X ≤ x) / P(X ≥ x) / P(a ≤ X ≤ b)) with numerically integrated, shaded probabilities. Optional `variants` support alternate formulas (used by Benini's ln vs log₁₀ toggle).
+  - **`DiscreteDistribution`** — a PMF bar chart with the selected region highlighted via bar alpha.
+  - **`SurfaceDistribution`** — a 3D `plot_surface` with a **View** selector (3D / XZ / YZ / XY).
+- **`DISTRIBUTIONS`** — the registry dict (`"Name": spec`) that [`Calculator_GUI.py`](Calculator_GUI.py) reads to populate the listbox and the Info menu. Each spec also carries an `info_pdf` path.
+
+`Calculator_GUI.py` imports `DISTRIBUTIONS` and calls `DISTRIBUTIONS[name].draw(...)` — one call produces any distribution's panel and plot.
+
 ## Menu Bar
 
 - **File → Save** — saves the current figure as an image. Opens a Save As dialog pre-filled with `{distribution}_{timestamp}.png`; matplotlib infers the format from the chosen extension (PNG, PDF, or SVG)
 - **Window → New Window** — launches a second instance of the calculator in a separate process
-- **Help → About** — placeholder
 - **Info → About** — opens a Toplevel window displaying the reference PDF for the currently selected distribution, rendered by `PDF_reader.show_pdf` (PyMuPDF + a tkinter Canvas with vertical scroll and mouse-wheel support)
 
 ## Distributions
@@ -56,13 +69,19 @@ Configurable shape parameters *a* and *b* on the support [0, 1].
 ### Cauchy
 Configurable location (x₀) and scale (γ). Heavy-tailed and symmetric about x₀; plotted over x₀ ± 10γ to show the slow tail decay.
 
+### Student's t
+Configurable degrees of freedom (ν). Symmetric, heavy-tailed; approaches the standard normal as ν grows.
+
+### Chi-squared
+Configurable degrees of freedom (k). Supported on x ≥ 0, with the plot range scaled to k + 4√(2k) to capture the bulk of the mass.
+
 The three bivariate/multivariate distributions render as 3D surface plots and share a **View** selector (3D, XZ, YZ, XY) that re-orients the camera to the requested orthographic plane.
 
 ### Bivariate Normal
-3D surface plot of the joint PDF. Configurable means, variances, and correlation.
+3D surface plot of the joint PDF. Configurable means, standard deviations, and correlation (ρ).
 
 ### Bivariate Cauchy
-3D surface plot of the joint PDF. A **Standard** mode (no parameters) and an **Interactive** mode with configurable scales, locations, and correlation (ρ).
+3D surface plot of the joint PDF. Configurable scales, locations, and correlation (ρ). The standard bivariate Cauchy is the special case scale = 1, location = 0, ρ = 0.
 
 ### Dirichlet
 3D surface plot over the unit square. Configurable shape parameters α and β.
@@ -95,41 +114,33 @@ python Calculator_GUI.py
 
 ```
 Distribution Calculator/
-├── Calculator_GUI.py              # Window setup, menu bar, listbox, canvas, distribution registry
+├── New_Distributions.py           # The engine: Param, Distribution base + 3 family
+│                                   # subclasses, all distribution specs, and the
+│                                   # DISTRIBUTIONS registry
+├── Calculator_GUI.py              # Window setup, menu bar, listbox, canvas; reads DISTRIBUTIONS
 ├── PDF_reader.py                  # show_pdf(master, pdf_path, width, height) — renders a PDF in a scrollable tk Canvas
 ├── pdfs/                          # Reference PDFs shown by Info → About
 │   ├── normal.pdf
 │   ├── binomial.pdf
 │   └── levey.pdf
-├── Distributions/                 # Pure maths — no tkinter imports
-│   ├── __init__.py
-│   ├── Normal_dist.py
-│   ├── Binomial_dist.py
-│   ├── Levy_dist.py
-│   ├── Slash_dist.py
-│   ├── Benini_dist.py
-│   ├── Reciprocal_dist.py
-│   ├── Raised_cosine_dist.py
-│   ├── Kumaraswamy_dist.py
-│   ├── Cauchy_dist.py
-│   ├── Multivariate_normal.py
-│   ├── Bivariate_Cauchy_dist.py
-│   └── Dirichlet_dist.py
-└── Panels/                        # GUI panels — one file per distribution
-    ├── __init__.py
-    ├── normal_panel.py
-    ├── Binomial_panel.py
-    ├── Levy_panel.py
-    ├── Slash_panel.py
-    ├── Benini_panel.py
-    ├── Reciprocal_panel.py
-    ├── Raised_cosine_panel.py
-    ├── Kumaraswamy_panel.py
-    ├── Cauchy_panel.py
-    ├── bivariate_panel.py
-    ├── bivariate_cauchy_panel.py
-    └── Dirichlet_panel.py
+├── Distributions/                 # (legacy package, now empty)
+│   └── __init__.py
+└── Panels/                        # (legacy package, now empty)
+    └── __init__.py
 ```
+
+## Adding a New Distribution
+
+Everything happens in [`New_Distributions.py`](New_Distributions.py):
+
+1. **Write one spec** — an instance of the family that fits:
+   - `ContinuousDistribution(...)` — supply the `pdf` formula, a list of `Param`s, a `plot_range`, and the integration `support`. (Use `variants` for alternate formulas.)
+   - `DiscreteDistribution(...)` — supply the `pmf`, `Param`s, the `k_param`, and the integer `support`.
+   - `SurfaceDistribution(...)` — supply a `surface(ax, **params)` function and its `Param`s.
+   Optionally set `info_pdf` to a file in `pdfs/` for the Info menu (defaults to `pdfs/normal.pdf`).
+2. **Register it** — add one line to the `DISTRIBUTIONS` dict: `"Name": your_spec`.
+
+No new files, no tkinter code, and no changes to `Calculator_GUI.py`.
 
 ## Planned Features
 
@@ -140,21 +151,15 @@ More distributions:
 4. ~~Kumaraswamy distribution~~
 5. ~~Bivariate Cauchy~~
 6. ~~Dirichlet~~
-7. Bivariate Laplace
-8. Copula surfaces
-9. Hyper-Erlang
-10. Muth distribution
-11. Gompertz distribution
+7. ~~Student's t~~
+8. ~~Chi-squared~~
+9. Bivariate Laplace
+10. Copula surfaces
+11. Hyper-Erlang
+12. Muth distribution
+13. Gompertz distribution
 
 GUI updates:
 - Themes
-- Info section for distributions
 - Reference PDFs for the remaining distributions (currently only Normal, Binomial, and Lévy have real content — the others fall back to `normal.pdf`)
 - Look-up table generator
-
-## Adding a New Distribution
-
-1. Add the maths to a new file in `Distributions/` — functions must accept `ax` as their first parameter and must not call `plt.show()`
-2. Create a panel file in `Panels/` with a `draw_*` function that accepts `(input_frame, fig, canvas)` and handles all widget creation and plotting
-3. Drop a reference PDF into `pdfs/` (or reuse an existing one as a placeholder)
-4. Import the panel function in `Calculator_GUI.py` and add one entry to the `DISTRIBUTIONS` dict in the form `"Name": [draw_fn, "pdfs/your_file.pdf"]` — the panel callable and PDF path are looked up by the listbox selection and the Info menu respectively
