@@ -14,20 +14,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PDF_reader import show_pdf
 import datetime
 
-from Panels.normal_panel import draw_normal
-from Panels.bivariate_panel import draw_bivariate
-from Panels.Binomial_panel import draw_normal as draw_binomial
-from Panels.Levy_panel import draw_levy
-from Panels.Slash_panel import draw_slash
-from Panels.Benini_panel import draw_benini
-from Panels.Reciprocal_panel import draw_reciprocal
-from Panels.Raised_cosine_panel import draw_raised_cosine
-from Panels.Kumaraswamy_panel import draw_kumaraswamy
-from Panels.Cauchy_panel import draw_cauchy
-from Panels.bivariate_cauchy_panel import draw_bivariate_cauchy
-from Panels.Dirichlet_panel import draw_dirichlet
-from Panels.Student_t_panel import draw_student_t
-from Panels.Chi_squared_panel import draw_chi_squared
+from New_Distributions import DISTRIBUTIONS
 
 def open_new_window():
     subprocess.Popen([sys.executable, __file__])
@@ -67,23 +54,8 @@ def reset_inputs():
         widget.destroy()
 
 # ---Distribution registry---
-# To add a new distribution: write a draw function in Panels/ and register it here.
-DISTRIBUTIONS = {
-    "Normal": [draw_normal, "pdfs/normal.pdf"],
-    "Binomial": [draw_binomial, "pdfs/binomial.pdf"],
-    "Lévy": [draw_levy, "pdfs/levey.pdf"],
-    "Slash": [draw_slash, "pdfs/normal.pdf"],
-    "Benini": [draw_benini, "pdfs/normal.pdf"],
-    "Reciprocal": [draw_reciprocal, "pdfs/normal.pdf"],
-    "Raised Cosine": [draw_raised_cosine, "pdfs/normal.pdf"],
-    "Kumaraswamy": [draw_kumaraswamy, "pdfs/normal.pdf"],
-    "Cauchy": [draw_cauchy, "pdfs/normal.pdf"],
-    "Student's t": [draw_student_t, "pdfs/normal.pdf"],
-    "Chi-squared": [draw_chi_squared, "pdfs/normal.pdf"],
-    "Bivariate Normal": [draw_bivariate, "pdfs/normal.pdf"],
-    "Bivariate Cauchy": [draw_bivariate_cauchy, "pdfs/normal.pdf"],
-    "Dirichlet": [draw_dirichlet, "pdfs/normal.pdf"]
-}
+# To add a new distribution: define a spec in New_Distributions.py and add it
+# to the DISTRIBUTIONS dict there. Nothing in this file needs to change.
 
 for name in DISTRIBUTIONS:
     Mylist.insert(tk.END, name)
@@ -100,13 +72,13 @@ def on_select(event):
         global current_distribution
         current_distribution = choice
         reset_inputs()
-        DISTRIBUTIONS[choice][0](input_frame, fig, canvas)
+        DISTRIBUTIONS[choice].draw(input_frame, fig, canvas)
 
 def info(current_distribution = current_distribution):
     new_window = tk.Toplevel(root)
     new_window.title(f"{current_distribution}")
     new_window.geometry("600x800")
-    pdf =  show_pdf(new_window, DISTRIBUTIONS[current_distribution][1])
+    pdf =  show_pdf(new_window, DISTRIBUTIONS[current_distribution].info_pdf)
     #pdf = tk.Canvas(new_window, image=show_pdf(new_window, "normal.pdf"))
     pdf.pack(pady=20)
     
@@ -148,7 +120,7 @@ infomenu.add_command(label="About", command= lambda: info(current_distribution))
 Mylist.bind("<<ListboxSelect>>", on_select)
 
 reset_inputs()
-draw_normal(input_frame, fig, canvas)
+DISTRIBUTIONS["Normal"].draw(input_frame, fig, canvas)
 root.mainloop()
 
 #while True:
